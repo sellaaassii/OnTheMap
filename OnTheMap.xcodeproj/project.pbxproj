@@ -22,6 +22,9 @@
 		8F408BD42447A85400A9939A /* StudentLocationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F408BD32447A85400A9939A /* StudentLocationModel.swift */; };
 		8F408BD62447DB4D00A9939A /* MapLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F408BD52447DB4D00A9939A /* MapLocationViewController.swift */; };
 		8F408BD824480D1E00A9939A /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F408BD724480D1E00A9939A /* Utils.swift */; };
+		8F408BDC2448BCD400A9939A /* MapLocationTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F408BDB2448BCD400A9939A /* MapLocationTableViewController.swift */; };
+		8F408BE024490A2C00A9939A /* MapTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F408BDF24490A2C00A9939A /* MapTabBarController.swift */; };
+		8F408BE22449397400A9939A /* AddLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F408BE12449397400A9939A /* AddLocationViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +45,9 @@
 		8F408BD32447A85400A9939A /* StudentLocationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudentLocationModel.swift; sourceTree = "<group>"; };
 		8F408BD52447DB4D00A9939A /* MapLocationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapLocationViewController.swift; sourceTree = "<group>"; };
 		8F408BD724480D1E00A9939A /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+		8F408BDB2448BCD400A9939A /* MapLocationTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapLocationTableViewController.swift; sourceTree = "<group>"; };
+		8F408BDF24490A2C00A9939A /* MapTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapTabBarController.swift; sourceTree = "<group>"; };
+		8F408BE12449397400A9939A /* AddLocationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddLocationViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,8 +80,8 @@
 		8F408BA32443E6A100A9939A /* OnTheMap */ = {
 			isa = PBXGroup;
 			children = (
-				8F408BA62443E6A100A9939A /* SceneDelegate.swift */,
 				8F408BA42443E6A100A9939A /* AppDelegate.swift */,
+				8F408BA62443E6A100A9939A /* SceneDelegate.swift */,
 				8F408BB22443E6A300A9939A /* Info.plist */,
 				8F408BB82446AF0400A9939A /* Model */,
 				8F408BBA2446AF3100A9939A /* Controller */,
@@ -109,8 +115,11 @@
 		8F408BBA2446AF3100A9939A /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				8F408BDF24490A2C00A9939A /* MapTabBarController.swift */,
+				8F408BDB2448BCD400A9939A /* MapLocationTableViewController.swift */,
 				8F408BBD2446B1B000A9939A /* LoginViewController.swift */,
 				8F408BD52447DB4D00A9939A /* MapLocationViewController.swift */,
+				8F408BE12449397400A9939A /* AddLocationViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -221,13 +230,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8F408BDC2448BCD400A9939A /* MapLocationTableViewController.swift in Sources */,
 				8F408BCD244773BF00A9939A /* StudentLocation.swift in Sources */,
 				8F408BBE2446B1B000A9939A /* LoginViewController.swift in Sources */,
 				8F408BD42447A85400A9939A /* StudentLocationModel.swift in Sources */,
 				8F408BA52443E6A100A9939A /* AppDelegate.swift in Sources */,
 				8F408BD62447DB4D00A9939A /* MapLocationViewController.swift in Sources */,
 				8F408BC42446B79600A9939A /* LoginResponse.swift in Sources */,
+				8F408BE22449397400A9939A /* AddLocationViewController.swift in Sources */,
 				8F408BBC2446AF4D00A9939A /* Client.swift in Sources */,
+				8F408BE024490A2C00A9939A /* MapTabBarController.swift in Sources */,
 				8F408BC22446B57B00A9939A /* LoginRequest.swift in Sources */,
 				8F408BA72443E6A100A9939A /* SceneDelegate.swift in Sources */,
 				8F408BD22447774700A9939A /* StudentLocationResponse.swift in Sources */,

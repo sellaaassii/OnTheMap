@@ -20,7 +20,12 @@ class LoginViewController: UIViewController {
         super.viewDidLoad()
 
         setupSignupTextView()
-
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
     }
     
     func setupSignupTextView() {
@@ -52,6 +57,15 @@ class LoginViewController: UIViewController {
         let alertVC = UIAlertController(title: "Login Failed", message: message, preferredStyle: .alert)
         alertVC.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         show(alertVC, sender: nil)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "segueFromLogin" {
+            self.emailTextField.text = ""
+            self.emailTextField.resignFirstResponder()
+            self.passwordTextField.text = ""
+            self.passwordTextField.resignFirstResponder()
+        }
     }
 
 }

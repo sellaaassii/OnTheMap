@@ -56,7 +56,7 @@ class Client {
         }
     }
 
-    class func taskForGETRequest<ResponseType: Decodable>(url: URL, responseType: ResponseType.Type, completion: @escaping (ResponseType?, Error?) -> Void) -> URLSessionDataTask {
+    class func taskForGETRequest<ResponseType: Decodable>(url: URL, responseType: ResponseType.Type, completion: @escaping (ResponseType?, Error?) -> Void) {
         let task = URLSession.shared.dataTask(with: url) { data, response, error in
             guard let data = data else {
                 DispatchQueue.main.async {
@@ -85,8 +85,6 @@ class Client {
             }
         }
         task.resume()
-        
-        return task
     }
     
     class func taskForPOSTRequest<RequestType: Encodable, ResponseType: Decodable>(url: URL, responseType: ResponseType.Type, body: RequestType, completion: @escaping (ResponseType?, Error?) -> Void) {
@@ -166,6 +164,31 @@ class Client {
                 }
             }
         }
+        task.resume()
+    }
+    
+    class func logout(completion: @escaping () -> Void) {
+        var request = URLRequest(url: Endpoints.login.url)
+        request.httpMethod = "DELETE"
+        
+        var xsrfCookie: HTTPCookie? = nil
+        let sharedCookieStorage = HTTPCookieStorage.shared
+
+        for cookie in sharedCookieStorage.cookies! {
+            if cookie.name == "XSRF-TOKEN" { xsrfCookie = cookie }
+        }
+
+        if let xsrfCookie = xsrfCookie {
+            request.setValue(xsrfCookie.value, forHTTPHeaderField: "X-XSRF-TOKEN")
+        }
+
+        let session = URLSession.shared
+        let task = session.dataTask(with: request) { data, response, error in
+            Auth.accountKey = ""
+            Auth.sessionId = ""
+            completion()
+        }
+    
         task.resume()
     }
     

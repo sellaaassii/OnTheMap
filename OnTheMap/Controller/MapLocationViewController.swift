@@ -18,9 +18,10 @@ class MapLocationViewController: UIViewController, MKMapViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         let limit = 100
-        let order = "-updatedAt"
+        let order = "updatedAt"
         Client.getStudents(limit: limit, order: order) { response, error in
             StudentLocationModel.locations = response
+            StudentLocationModel.annotationsPast = [MKPointAnnotation]()
             print("responses bro")
             
             for location in StudentLocationModel.locations {
@@ -34,13 +35,23 @@ class MapLocationViewController: UIViewController, MKMapViewDelegate {
                 annotation.title = "\(location.firstName) \(location.lastName)"
                 annotation.subtitle = location.mediaURL
                 
-                StudentLocationModel.annotations.append(annotation)
+                StudentLocationModel.annotationsPast.append(annotation)
             }
             
-            self.mapView.addAnnotations(StudentLocationModel.annotations)
+            self.mapView.addAnnotations(StudentLocationModel.annotationsPast)
             self.mapView.delegate = self
             
         }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        self.mapView.reloadInputViews()
+        reloadData()
+    }
+    
+    func reloadData() {
+        self.mapView.removeAnnotations(self.mapView.annotations)
+        self.mapView.addAnnotations(StudentLocationModel.annotationsPast)
     }
 
 
