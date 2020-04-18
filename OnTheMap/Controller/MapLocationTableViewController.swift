@@ -22,19 +22,19 @@ class MapLocationTableViewController: UIViewController {
         let limit = 100
         let order = "-updatedAt"
 
-        Client.getStudents(limit: limit, order: order) { response, error in
-            StudentLocationModel.locations = response
+        Client.getStudentLocations(limit: limit, order: order) { response, error in
+            StudentLocationModel.locations = response!
             StudentLocationModel.annotationsRecent = [MKPointAnnotation]()
 
             for location in StudentLocationModel.locations {
-                let latitude  = CLLocationDegrees(location.latitude)
-                let longitude = CLLocationDegrees(location.longitude)
+                let latitude  = CLLocationDegrees(location.latitude!)
+                let longitude = CLLocationDegrees(location.longitude!)
                 
                 let coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
                 
                 let annotation = MKPointAnnotation()
                 annotation.coordinate = coordinate
-                annotation.title = "\(location.firstName) \(location.lastName)"
+                annotation.title = "\(location.firstName!) \(location.lastName!)"
                 annotation.subtitle = location.mediaURL
 
                 StudentLocationModel.annotationsRecent.append(annotation)

@@ -45,6 +45,7 @@ class LoginViewController: UIViewController {
         Client.login(username: emailTextField.text ?? "", password: passwordTextField.text ?? "", completion: handleLoginResponse(success:error:))
     }
     
+    //TODO: show appropriate login message
     func handleLoginResponse(success: Bool, error: Error?) {
         if success {
             performSegue(withIdentifier: "segueFromLogin", sender: nil)

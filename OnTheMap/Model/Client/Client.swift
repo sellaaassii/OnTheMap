@@ -19,38 +19,44 @@ class Client {
         static let base = "https://onthemap-api.udacity.com/v1"
         
         case login
-        case getStudents(limit: Int?, skip: Int?, order: String?, uniqueKey: String?)
-        case getStudent(userId: String)
+        case getStudentLocations(limit: Int?, skip: Int?, order: String?, uniqueKey: String?)
+        case getPublicUserData(userId: String)
+        case postLocation
+        case putLocation(objectId: String)
 
         var stringValue: String {
             switch self {
             case .login:
                 return Endpoints.base + "/session"
-            case .getStudents(limit: let limit, skip: let skip, order: let order, uniqueKey: let uniqueKey):
-                if let limit = limit, let skip = skip, let order = order, let uniqueKey = uniqueKey {
+            case .getStudentLocations(limit: let limit, skip: let skip, order: let order, uniqueKey: let uniqueKey):
+                if let limit = limit, let skip = skip, let order = order, let uniqueKey = uniqueKey, !order.isEmpty, !uniqueKey.isEmpty {
                     return Endpoints.base + "/StudentLocation?limit=\(limit)&skip=\(skip)&order=\(order)&uniqueKey=\(uniqueKey)"
                 }
-                if let limit = limit, let skip = skip, let order = order {
+                if let limit = limit, let skip = skip, let order = order, !order.isEmpty {
                     return Endpoints.base + "/StudentLocation?limit=\(limit)&skip=\(skip)&order=\(order)"
                 }
                 if let limit = limit, let skip = skip {
                     return Endpoints.base + "/StudentLocation?limit=\(limit)&skip=\(skip)"
                 }
-                if let order = order, let limit = limit {
+                if let order = order, let limit = limit, !order.isEmpty {
                     return Endpoints.base + "/StudentLocation?order=\(order)&limit=\(limit)"
                 }
                 if let limit = limit {
                     return Endpoints.base + "/StudentLocation?limit=\(limit)"
                 }
-                if let order = order {
+                if let order = order, !order.isEmpty {
                     return Endpoints.base + "/StudentLocation?order=\(order)"
                 }
-                if let uniqueKey = uniqueKey {
+                if let uniqueKey = uniqueKey, !uniqueKey.isEmpty {
                     return Endpoints.base + "/StudentLocation?uniqueKey=\(uniqueKey)"
                 }
                 return Endpoints.base + "/StudentLocation"
-            case .getStudent(let userId):
+            case .getPublicUserData(let userId):
                 return Endpoints.base + "/users/\(userId)"
+            case .postLocation:
+                return Endpoints.base + "/StudentLocation"
+            case .putLocation(let objectID):
+                return Endpoints.base + "/StudentLocation/\(objectID)"
             }
         }
 
@@ -75,16 +81,16 @@ class Client {
                     completion(responseObject, nil)
                 }
             } catch {
-                do {
-                    let errorResponse = try decoder.decode(ErrorResponse.self, from: data) as Error
-                    DispatchQueue.main.async {
-                        completion(nil, errorResponse)
-                    }
-                } catch {
+//                do {
+//                    let errorResponse = try decoder.decode(ErrorResponse.self, from: data) as Error
+//                    DispatchQueue.main.async {
+//                        completion(nil, errorResponse)
+//                    }
+//                } catch {
                     DispatchQueue.main.async {
                         completion(nil, error)
                     }
-                }
+//                }
             }
         }
         task.resume()
@@ -170,6 +176,7 @@ class Client {
         task.resume()
     }
     
+    // TODO: MAYBE CREATE TASK FOR DELETE REQUEST?
     class func logout(completion: @escaping () -> Void) {
         var request = URLRequest(url: Endpoints.login.url)
         request.httpMethod = "DELETE"
@@ -195,27 +202,137 @@ class Client {
         task.resume()
     }
     
-    class func getStudents(limit: Int? = nil, skip: Int? = nil, order: String? = "", uniqueKey: String? = "", completion: @escaping ([StudentLocation], Error?) -> Void) {
-        let url = Endpoints.getStudents(limit: limit, skip: skip, order: order, uniqueKey: uniqueKey).url
+    class func getStudentLocations(limit: Int? = nil, skip: Int? = nil, order: String? = "", uniqueKey: String? = "", completion: @escaping ([StudentLocation]?, Error?) -> Void) {
+        let url = Endpoints.getStudentLocations(limit: limit, skip: skip, order: order, uniqueKey: uniqueKey).url
         print("the endpoint: \(url)")
         taskForGETRequest(url: url, responseType: StudentLocationResponse.self) { response, error in
             if let response = response {
                 completion(response.results, nil)
             } else {
+                print("error in get student locations \(error)")
                 completion([], error)
             }
         }
     }
     
-    class func getStudent(userId: String, completion: @escaping (UserInformation?, Error?) -> Void ) {
-        let url = Endpoints.getStudent(userId: userId).url
-        taskForGETRequest(url: url, responseType: UserInformation.self) { response, error in
-            if let response = response {
-                completion(response, nil)
-            } else {
+    class func getPublicUserData(userId: String, completion: @escaping (UserInformation?, Error?) -> Void ) {
+        let url = Endpoints.getPublicUserData(userId: userId).url
+        print("user date endpoint \(url)")
+        let request = URLRequest(url: url)
+        let session = URLSession.shared
+        let task = session.dataTask(with: request) { data, response, error in
+          if error != nil {
+            DispatchQueue.main.async {
                 completion(nil, error)
             }
+             
+             return
+          }
+            
+          let range = 5..<data!.count
+          let newData = data?.subdata(in: range)
+            
+            let decoder = JSONDecoder()
+            let responseObject = try! decoder.decode(UserInformation.self, from: newData!)
+            DispatchQueue.main.async {
+                completion(responseObject, nil)
+            }
+            
         }
+        task.resume()
+        
+        
+//        taskForGETRequest(url: url, responseType: UserInformation.self) { response, error in
+//            if let response = response {
+//                completion(response, nil)
+//            } else {
+//                print("error in get pulic data user \(error)")
+//                completion(nil, error)
+//            }
+//        }
+    }
+    
+    class func postStudentLocation(student: StudentLocation, completion: @escaping (Bool, Error?) -> Void) {
+        let url = Endpoints.postLocation.url
+        var request = URLRequest(url: url)
+
+        request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        let encoder = JSONEncoder()
+        do {
+            request.httpBody = try encoder.encode(student)
+        } catch {
+            DispatchQueue.main.async {
+                 completion(false, error)
+            }
+           
+            return
+        }
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            if error != nil {
+                DispatchQueue.main.async {
+                    completion(false, error)
+                }
+                
+                return
+            }
+            
+            DispatchQueue.main.async {
+                completion(true, nil)
+            }
+            
+        }
+
+        task.resume()
+    }
+    
+    //TODO: MAYBE REFACTOR INTO TASK FOR POST
+    class func putStudentLocation(student: StudentLocation, completion: @escaping (Bool, Error?) -> Void) {
+        let url = Endpoints.putLocation(objectId: student.objectId!).url
+        var request = URLRequest(url: url)
+
+        request.httpMethod = "PUT"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        let encoder = JSONEncoder()
+        do {
+            request.httpBody = try encoder.encode(student)
+        } catch {
+            DispatchQueue.main.async {
+                completion(false, error)
+            }
+            
+            return
+        }
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            if error != nil {
+                do {
+                    // TODO: CHECK ERROR CODE IN RESPONSE
+                    let decoder = JSONDecoder()
+                    let errorResponse = try decoder.decode(ErrorResponse.self, from: data!)
+                    DispatchQueue.main.async {
+                        completion(false, errorResponse)
+                    }
+                    
+                } catch {
+                    DispatchQueue.main.async {
+                        completion(false, error)
+                    }
+                    
+                }
+                return
+            }
+
+            DispatchQueue.main.async {
+                completion(true, nil)
+            }
+            
+        }
+
+        task.resume()
     }
 
 }

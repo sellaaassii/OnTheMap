@@ -28,6 +28,7 @@ class AddLocationViewController: UIViewController {
         self.dismiss(animated: true, completion: nil)
     }
 
+    //TODO: Show appropriate error message
     @IBAction func findLocation(_ sender: Any) {
         // check if student exists with get and Auth key:
         //    if yes: then we want to use the put location
@@ -76,30 +77,12 @@ class AddLocationViewController: UIViewController {
             annotation.title = self.locationInString
 
             controller.annotation = annotation
+            controller.url = self.linkToAdd
+            controller.mapLocationString = self.locationInString
+
             self.navigationController?.pushViewController(controller, animated: true)
         } else {
             showLocationFailure(message: error!.localizedDescription)
         }
     }
-
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "showLocationAnnotated" {
-            print("obviously segue identified")
-            
-        }
-        
-        print("i guess we're out of that if block tho")
-    }
-
-    //func getCoordinate
-    
-//    func handleGetStudent(user: UserInformation?, error: Error?) {
-        
-//    Client.getStudent(userId: Client.Auth.accountKey) { response, error in
-//        if let response = response {
-//
-//        } else {
-//
-//        }
-//    }
 }

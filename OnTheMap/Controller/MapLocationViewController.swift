@@ -19,14 +19,14 @@ class MapLocationViewController: UIViewController, MKMapViewDelegate {
         super.viewDidLoad()
         let limit = 100
         let order = "updatedAt"
-        Client.getStudents(limit: limit, order: order) { response, error in
-            StudentLocationModel.locations = response
+        Client.getStudentLocations(limit: limit, order: order) { response, error in
+            StudentLocationModel.locations = response!
             StudentLocationModel.annotationsPast = [MKPointAnnotation]()
             print("responses bro")
             
             for location in StudentLocationModel.locations {
-                let latitude  = CLLocationDegrees(location.latitude)
-                let longitude = CLLocationDegrees(location.longitude)
+                let latitude  = CLLocationDegrees(location.latitude!)
+                let longitude = CLLocationDegrees(location.longitude!)
                 
                 let coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
                 

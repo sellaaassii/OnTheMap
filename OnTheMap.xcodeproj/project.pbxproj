@@ -27,6 +27,7 @@
 		8F408BE22449397400A9939A /* AddLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F408BE12449397400A9939A /* AddLocationViewController.swift */; };
 		8F408BE4244A6A5300A9939A /* UserInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F408BE3244A6A5300A9939A /* UserInformation.swift */; };
 		8F408BE6244A994D00A9939A /* AddLocationMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F408BE5244A994D00A9939A /* AddLocationMapViewController.swift */; };
+		8F408BE8244ABB7000A9939A /* PutLocationResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F408BE7244ABB7000A9939A /* PutLocationResponse.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,6 +53,7 @@
 		8F408BE12449397400A9939A /* AddLocationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddLocationViewController.swift; sourceTree = "<group>"; };
 		8F408BE3244A6A5300A9939A /* UserInformation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInformation.swift; sourceTree = "<group>"; };
 		8F408BE5244A994D00A9939A /* AddLocationMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddLocationMapViewController.swift; sourceTree = "<group>"; };
+		8F408BE7244ABB7000A9939A /* PutLocationResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PutLocationResponse.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -137,6 +139,7 @@
 				8F408BC52446C33500A9939A /* ErrorResponse.swift */,
 				8F408BCC244773BF00A9939A /* StudentLocation.swift */,
 				8F408BE3244A6A5300A9939A /* UserInformation.swift */,
+				8F408BE7244ABB7000A9939A /* PutLocationResponse.swift */,
 			);
 			path = Responses;
 			sourceTree = "<group>";
@@ -247,6 +250,7 @@
 				8F408BE22449397400A9939A /* AddLocationViewController.swift in Sources */,
 				8F408BBC2446AF4D00A9939A /* Client.swift in Sources */,
 				8F408BE024490A2C00A9939A /* MapTabBarController.swift in Sources */,
+				8F408BE8244ABB7000A9939A /* PutLocationResponse.swift in Sources */,
 				8F408BE6244A994D00A9939A /* AddLocationMapViewController.swift in Sources */,
 				8F408BC22446B57B00A9939A /* LoginRequest.swift in Sources */,
 				8F408BA72443E6A100A9939A /* SceneDelegate.swift in Sources */,
