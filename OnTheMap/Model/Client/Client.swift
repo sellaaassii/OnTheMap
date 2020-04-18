@@ -20,6 +20,7 @@ class Client {
         
         case login
         case getStudents(limit: Int?, skip: Int?, order: String?, uniqueKey: String?)
+        case getStudent(userId: String)
 
         var stringValue: String {
             switch self {
@@ -48,6 +49,8 @@ class Client {
                     return Endpoints.base + "/StudentLocation?uniqueKey=\(uniqueKey)"
                 }
                 return Endpoints.base + "/StudentLocation"
+            case .getStudent(let userId):
+                return Endpoints.base + "/users/\(userId)"
             }
         }
 
@@ -204,4 +207,15 @@ class Client {
         }
     }
     
+    class func getStudent(userId: String, completion: @escaping (UserInformation?, Error?) -> Void ) {
+        let url = Endpoints.getStudent(userId: userId).url
+        taskForGETRequest(url: url, responseType: UserInformation.self) { response, error in
+            if let response = response {
+                completion(response, nil)
+            } else {
+                completion(nil, error)
+            }
+        }
+    }
+
 }
