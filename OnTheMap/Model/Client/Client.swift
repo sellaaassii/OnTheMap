@@ -82,16 +82,9 @@ class Client {
                 }
                 return
             } catch {
-//                do {
-//                    let errorResponse = try decoder.decode(ErrorResponse.self, from: data) as Error
-//                    DispatchQueue.main.async {
-//                        completion(nil, errorResponse)
-//                    }
-//                } catch {
                     DispatchQueue.main.async {
                         completion(nil, error)
                     }
-//                }
             }
         }
         task.resume()
@@ -152,7 +145,6 @@ class Client {
 
             let range = 5..<data.count
             let dataWithoutSecurityCheck = data.subdata(in: range)
-            print(String(data: dataWithoutSecurityCheck, encoding: .utf8)!)
 
             do {
                 let responseObject = try decoder.decode(LoginResponse.self, from: dataWithoutSecurityCheck)
@@ -205,13 +197,11 @@ class Client {
     
     class func getStudentLocations(limit: Int? = nil, skip: Int? = nil, order: String? = "", uniqueKey: String? = "", completion: @escaping ([StudentLocation]?, Error?) -> Void) {
         let url = Endpoints.getStudentLocations(limit: limit, skip: skip, order: order, uniqueKey: uniqueKey).url
-        print("the endpoint: \(url)")
         taskForGETRequest(url: url, responseType: StudentLocationResponse.self) { response, error in
             if let response = response {
                 completion(response.results, nil)
                 return
             } else {
-                print("error in get student locations \(error)")
                 completion([], error)
             }
         }
@@ -219,7 +209,6 @@ class Client {
     
     class func getPublicUserData(userId: String, completion: @escaping (UserInformation?, Error?) -> Void ) {
         let url = Endpoints.getPublicUserData(userId: userId).url
-        print("user date endpoint \(url)")
         let request = URLRequest(url: url)
         let session = URLSession.shared
         let task = session.dataTask(with: request) { data, response, error in
@@ -242,16 +231,6 @@ class Client {
             
         }
         task.resume()
-        
-        
-//        taskForGETRequest(url: url, responseType: UserInformation.self) { response, error in
-//            if let response = response {
-//                completion(response, nil)
-//            } else {
-//                print("error in get pulic data user \(error)")
-//                completion(nil, error)
-//            }
-//        }
     }
     
     class func postStudentLocation(student: StudentLocation, completion: @escaping (Bool, Error?) -> Void) {
@@ -277,7 +256,6 @@ class Client {
                 DispatchQueue.main.async {
                     completion(false, error)
                 }
-                
                 return
             }
             
@@ -305,7 +283,6 @@ class Client {
             DispatchQueue.main.async {
                 completion(false, error)
             }
-            
             return
         }
         

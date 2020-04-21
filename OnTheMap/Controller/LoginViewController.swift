@@ -37,6 +37,7 @@ class LoginViewController: UIViewController {
         signUpTextView.attributedText = signupString
         signUpTextView.isEditable     = false
         signUpTextView.isUserInteractionEnabled = true
+        signUpTextView.textAlignment = .center
 
         signUpTextView.linkTextAttributes = [.foregroundColor: UIColor.blue]
     }
