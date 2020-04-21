@@ -15,7 +15,8 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var loginButton: UIButton!
     @IBOutlet weak var signUpTextView: UITextView!
-
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -43,10 +44,12 @@ class LoginViewController: UIViewController {
     }
     
     @IBAction func loginClicked(_ sender: Any) {
+        setLoggingIn(true)
         Client.login(username: emailTextField.text ?? "", password: passwordTextField.text ?? "", completion: handleLoginResponse(success:error:))
     }
     
     func handleLoginResponse(success: Bool, error: Error?) {
+        setLoggingIn(false)
         if success {
             performSegue(withIdentifier: "segueFromLogin", sender: nil)
         } else {
@@ -62,6 +65,19 @@ class LoginViewController: UIViewController {
             self.passwordTextField.text = ""
             self.passwordTextField.resignFirstResponder()
         }
+    }
+    
+    func setLoggingIn(_ loggingIn: Bool) {
+        if loggingIn {
+            activityIndicator.startAnimating()
+        } else {
+            activityIndicator.stopAnimating()
+        }
+        
+        loginButton.isEnabled       = !loggingIn
+        emailTextField.isEnabled    = !loggingIn
+        passwordTextField.isEnabled = !loggingIn
+        
     }
 
 }

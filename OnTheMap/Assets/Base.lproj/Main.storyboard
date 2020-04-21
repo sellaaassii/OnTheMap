@@ -40,9 +40,6 @@
                                     <action selector="loginClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="UXv-Gh-Xwj"/>
                                 </connections>
                             </button>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo-u" translatesAutoresizingMaskIntoConstraints="NO" id="SWV-o6-cpu">
-                                <rect key="frame" x="87" y="180" width="240" height="149"/>
-                            </imageView>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Don't have an account? Sign up" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="RMU-uV-x2y">
                                 <rect key="frame" x="87" y="558" width="240" height="47"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
@@ -50,15 +47,25 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo-u" translatesAutoresizingMaskIntoConstraints="NO" id="SWV-o6-cpu">
+                                <rect key="frame" x="87" y="180" width="240" height="149"/>
+                            </imageView>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="d5d-Ve-fdU">
+                                <rect key="frame" x="178" y="620" width="59" height="57"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="RMU-uV-x2y" secondAttribute="trailing" constant="87" id="06Q-nK-6O1"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="d5d-Ve-fdU" secondAttribute="trailing" constant="177" id="1sO-3U-tKq"/>
                             <constraint firstItem="14z-UU-Cts" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="87" id="4JY-S7-kgd"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="d5d-Ve-fdU" secondAttribute="bottom" constant="185" id="BoT-V7-tp3"/>
                             <constraint firstItem="vLf-dn-GMK" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="87" id="DFv-wY-drZ"/>
                             <constraint firstItem="SWV-o6-cpu" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="87" id="GMD-Je-bdG"/>
                             <constraint firstItem="SWV-o6-cpu" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="136" id="II3-WT-4cp"/>
                             <constraint firstItem="14z-UU-Cts" firstAttribute="top" secondItem="EEh-RK-Gam" secondAttribute="bottom" constant="8" id="Iiu-IF-FMw"/>
+                            <constraint firstItem="d5d-Ve-fdU" firstAttribute="top" secondItem="RMU-uV-x2y" secondAttribute="bottom" constant="15" id="Kcn-mb-ea6"/>
+                            <constraint firstItem="d5d-Ve-fdU" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="178" id="Kwu-IY-Tq6"/>
                             <constraint firstItem="EEh-RK-Gam" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="87" id="UQa-cf-gc8"/>
                             <constraint firstItem="RMU-uV-x2y" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="87" id="WAV-Tm-MWt"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="SWV-o6-cpu" secondAttribute="bottom" constant="533" id="WBG-y0-Phr"/>
@@ -77,6 +84,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="z9i-Xe-qrx"/>
                     <connections>
+                        <outlet property="activityIndicator" destination="d5d-Ve-fdU" id="wf9-5j-CU7"/>
                         <outlet property="emailTextField" destination="EEh-RK-Gam" id="SCJ-Bx-cUM"/>
                         <outlet property="loginButton" destination="vLf-dn-GMK" id="Sz9-La-dbh"/>
                         <outlet property="logoImageView" destination="SWV-o6-cpu" id="VLU-Rb-2Di"/>
