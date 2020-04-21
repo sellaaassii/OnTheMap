@@ -88,11 +88,11 @@
 			children = (
 				8F408BA42443E6A100A9939A /* AppDelegate.swift */,
 				8F408BA62443E6A100A9939A /* SceneDelegate.swift */,
+				8F408BD724480D1E00A9939A /* Utils.swift */,
 				8F408BB22443E6A300A9939A /* Info.plist */,
 				8F408BB82446AF0400A9939A /* Model */,
 				8F408BBA2446AF3100A9939A /* Controller */,
 				8F408BB92446AF2600A9939A /* Assets */,
-				8F408BD724480D1E00A9939A /* Utils.swift */,
 			);
 			path = OnTheMap;
 			sourceTree = "<group>";
