@@ -15,12 +15,18 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var loginButton: UIButton!
     @IBOutlet weak var signUpTextView: UITextView!
-
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         setupSignupTextView()
-
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
     }
     
     func setupSignupTextView() {
@@ -29,32 +35,50 @@ class LoginViewController: UIViewController {
 
         signupString.setAttributes([.link: signupUrl], range: NSMakeRange(23, 7))
 
-        signUpTextView.attributedText = signupString
-        signUpTextView.isEditable     = false
+        signUpTextView.attributedText           = signupString
+        signUpTextView.isEditable               = false
+        signUpTextView.textAlignment            = .center
         signUpTextView.isUserInteractionEnabled = true
 
-        signUpTextView.linkTextAttributes = [.foregroundColor: UIColor.blue]
+        signUpTextView.linkTextAttributes       = [.foregroundColor: UIColor.blue]
     }
     
     @IBAction func loginClicked(_ sender: Any) {
+        setLoggingIn(true)
         Client.login(username: emailTextField.text ?? "", password: passwordTextField.text ?? "", completion: handleLoginResponse(success:error:))
     }
     
     func handleLoginResponse(success: Bool, error: Error?) {
+        setLoggingIn(false)
         if success {
             performSegue(withIdentifier: "segueFromLogin", sender: nil)
         } else {
-            showLoginFailure(message: error?.localizedDescription ?? "")
+            showMessage(message: "Incorrect username or password 🌚", title: "Login Failed")
+        }
+    }
+
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "segueFromLogin" {
+            self.emailTextField.text = ""
+            self.emailTextField.resignFirstResponder()
+
+            self.passwordTextField.text = ""
+            self.passwordTextField.resignFirstResponder()
         }
     }
     
-    func showLoginFailure(message: String) {
-        let alertVC = UIAlertController(title: "Login Failed", message: message, preferredStyle: .alert)
-        alertVC.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-        show(alertVC, sender: nil)
+    func setLoggingIn(_ loggingIn: Bool) {
+        if loggingIn {
+            activityIndicator.startAnimating()
+        } else {
+            activityIndicator.stopAnimating()
+        }
+        
+        loginButton.isEnabled       = !loggingIn
+        emailTextField.isEnabled    = !loggingIn
+        passwordTextField.isEnabled = !loggingIn
+        
     }
-
-    
 
 }
 
