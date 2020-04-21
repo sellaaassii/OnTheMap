@@ -199,7 +199,7 @@ class Client {
         task.resume()
     }
     
-    class func getStudentLocations(limit: Int? = nil, skip: Int? = nil, order: String? = "", uniqueKey: String? = "", completion: @escaping ([StudentLocation]?, Error?) -> Void) {
+    class func getStudentLocations(limit: Int? = nil, skip: Int? = nil, order: String? = "", uniqueKey: String? = "", completion: @escaping ([StudentInformation]?, Error?) -> Void) {
         let url = Endpoints.getStudentLocations(limit: limit, skip: skip, order: order, uniqueKey: uniqueKey).url
         taskForGETRequest(url: url, responseType: StudentLocationResponse.self) { response, error in
             if let response = response {
@@ -238,7 +238,7 @@ class Client {
         task.resume()
     }
     
-    class func postStudentLocation(student: StudentLocation, completion: @escaping (Bool, Error?) -> Void) {
+    class func postStudentLocation(student: StudentInformation, completion: @escaping (Bool, Error?) -> Void) {
         let url = Endpoints.postLocation.url
         var request = URLRequest(url: url)
 
@@ -274,7 +274,7 @@ class Client {
     }
     
     //TODO: MAYBE REFACTOR INTO TASK FOR POST
-    class func putStudentLocation(student: StudentLocation, completion: @escaping (Bool, Error?) -> Void) {
+    class func putStudentLocation(student: StudentInformation, completion: @escaping (Bool, Error?) -> Void) {
         let url = Endpoints.putLocation(objectId: student.objectId!).url
         var request = URLRequest(url: url)
 

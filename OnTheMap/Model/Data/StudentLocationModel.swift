@@ -9,11 +9,11 @@
 import Foundation
 
 class StudentLocationModel {
-    static var locationsPast         = [StudentLocation]()
-    static var locationsRecent   = [StudentLocation]()
+    static var locationsPast         = [StudentInformation]()
+    static var locationsRecent   = [StudentInformation]()
     
     class func clearAll() {
-       locationsPast         = [StudentLocation]()
-       locationsRecent   = [StudentLocation]()
+       locationsPast         = [StudentInformation]()
+       locationsRecent   = [StudentInformation]()
     }
 }

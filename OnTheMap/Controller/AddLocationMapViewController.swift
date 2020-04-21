@@ -17,7 +17,7 @@ class AddLocationMapViewController: UIViewController {
     var annotation: MKPointAnnotation!
     var mapLocationString: String!
     var url: String!
-    var locations: [StudentLocation]!
+    var locations: [StudentInformation]!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,7 +46,7 @@ class AddLocationMapViewController: UIViewController {
         Client.getStudentLocations(uniqueKey: Client.Auth.accountKey, completion: handleCheckExistingStudent(results:error:))
 }
     
-    func handleCheckExistingStudent(results: [StudentLocation]?, error: Error?) {
+    func handleCheckExistingStudent(results: [StudentInformation]?, error: Error?) {
         var objectId = ""
         if let results = results, results.count > 0 {
             objectId = results[0].objectId!
@@ -58,7 +58,7 @@ class AddLocationMapViewController: UIViewController {
                 self.showMessage(message: "Your session has timed out. Please try logging in again! 🙃", title: "Session Timeout")
             } else if let response = response {
 
-                let student = StudentLocation(objectId: objectId, uniqueKey: response.key, firstName: response.firstName, lastName: response.lastName, mapString: self.mapLocationString, mediaURL: self.url, latitude: Float(self.annotation.coordinate.latitude), longitude: Float(self.annotation.coordinate.longitude))
+                let student = StudentInformation(objectId: objectId, uniqueKey: response.key, firstName: response.firstName, lastName: response.lastName, mapString: self.mapLocationString, mediaURL: self.url, latitude: Float(self.annotation.coordinate.latitude), longitude: Float(self.annotation.coordinate.longitude))
 
                 //the user id exists, meaning there are locations, so update existing location
                 if !objectId.isEmpty {

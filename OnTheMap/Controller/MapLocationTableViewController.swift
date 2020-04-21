@@ -22,7 +22,7 @@ class MapLocationTableViewController: UIViewController {
         let order = "-updatedAt"
 
         Client.getStudentLocations(limit: limit, order: order) { response, error in
-            StudentLocationModel.locationsRecent = response ?? [StudentLocation]()
+            StudentLocationModel.locationsRecent = response ?? [StudentInformation]()
 
             self.tableView.delegate = self
             self.tableView.dataSource = self

@@ -20,7 +20,7 @@ class MapLocationViewController: UIViewController, MKMapViewDelegate {
         let limit = 100
         let order = "updatedAt"
         Client.getStudentLocations(limit: limit, order: order) { response, error in
-            StudentLocationModel.locationsPast = response ?? [StudentLocation]()
+            StudentLocationModel.locationsPast = response ?? [StudentInformation]()
             
             self.reloadData()
             self.mapView.delegate = self

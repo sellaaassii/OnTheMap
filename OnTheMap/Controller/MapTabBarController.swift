@@ -30,8 +30,8 @@ class MapTabBarController: UITabBarController {
         let order = "-updatedAt"
         
         Client.getStudentLocations(limit: limit, order: order) { response, error in
-            StudentLocationModel.locationsRecent = response ?? [StudentLocation]()
-            StudentLocationModel.locationsPast   = response ?? [StudentLocation]()
+            StudentLocationModel.locationsRecent = response ?? [StudentInformation]()
+            StudentLocationModel.locationsPast   = response ?? [StudentInformation]()
             
             let mapViewController      = self.viewControllers?[0] as! MapLocationViewController
             let mapTableViewController = self.viewControllers?[1] as! MapLocationTableViewController
