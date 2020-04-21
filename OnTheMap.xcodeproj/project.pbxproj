@@ -11,7 +11,6 @@
 		8F408BA72443E6A100A9939A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F408BA62443E6A100A9939A /* SceneDelegate.swift */; };
 		8F408BAE2443E6A300A9939A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8F408BAD2443E6A300A9939A /* Assets.xcassets */; };
 		8F408BB12443E6A300A9939A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8F408BAF2443E6A300A9939A /* LaunchScreen.storyboard */; };
-		8F408BBC2446AF4D00A9939A /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F408BBB2446AF4D00A9939A /* Client.swift */; };
 		8F408BBE2446B1B000A9939A /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F408BBD2446B1B000A9939A /* LoginViewController.swift */; };
 		8F408BC22446B57B00A9939A /* LoginRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F408BC12446B57B00A9939A /* LoginRequest.swift */; };
 		8F408BC42446B79600A9939A /* LoginResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F408BC32446B79600A9939A /* LoginResponse.swift */; };
@@ -28,6 +27,7 @@
 		8F408BE4244A6A5300A9939A /* UserInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F408BE3244A6A5300A9939A /* UserInformation.swift */; };
 		8F408BE6244A994D00A9939A /* AddLocationMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F408BE5244A994D00A9939A /* AddLocationMapViewController.swift */; };
 		8F408BE8244ABB7000A9939A /* PutLocationResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F408BE7244ABB7000A9939A /* PutLocationResponse.swift */; };
+		8F408BEA244EDA3000A9939A /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F408BE9244EDA3000A9939A /* Client.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,7 +37,6 @@
 		8F408BAD2443E6A300A9939A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8F408BB02443E6A300A9939A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8F408BB22443E6A300A9939A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		8F408BBB2446AF4D00A9939A /* Client.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Client.swift; sourceTree = "<group>"; };
 		8F408BBD2446B1B000A9939A /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		8F408BC12446B57B00A9939A /* LoginRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRequest.swift; sourceTree = "<group>"; };
 		8F408BC32446B79600A9939A /* LoginResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginResponse.swift; sourceTree = "<group>"; };
@@ -54,6 +53,7 @@
 		8F408BE3244A6A5300A9939A /* UserInformation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInformation.swift; sourceTree = "<group>"; };
 		8F408BE5244A994D00A9939A /* AddLocationMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddLocationMapViewController.swift; sourceTree = "<group>"; };
 		8F408BE7244ABB7000A9939A /* PutLocationResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PutLocationResponse.swift; sourceTree = "<group>"; };
+		8F408BE9244EDA3000A9939A /* Client.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Client.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -155,7 +155,7 @@
 		8F408BCB2446CB1B00A9939A /* Client */ = {
 			isa = PBXGroup;
 			children = (
-				8F408BBB2446AF4D00A9939A /* Client.swift */,
+				8F408BE9244EDA3000A9939A /* Client.swift */,
 			);
 			path = Client;
 			sourceTree = "<group>";
@@ -247,8 +247,8 @@
 				8F408BE4244A6A5300A9939A /* UserInformation.swift in Sources */,
 				8F408BD62447DB4D00A9939A /* MapLocationViewController.swift in Sources */,
 				8F408BC42446B79600A9939A /* LoginResponse.swift in Sources */,
+				8F408BEA244EDA3000A9939A /* Client.swift in Sources */,
 				8F408BE22449397400A9939A /* AddLocationViewController.swift in Sources */,
-				8F408BBC2446AF4D00A9939A /* Client.swift in Sources */,
 				8F408BE024490A2C00A9939A /* MapTabBarController.swift in Sources */,
 				8F408BE8244ABB7000A9939A /* PutLocationResponse.swift in Sources */,
 				8F408BE6244A994D00A9939A /* AddLocationMapViewController.swift in Sources */,

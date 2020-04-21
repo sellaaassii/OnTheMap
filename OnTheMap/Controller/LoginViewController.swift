@@ -53,6 +53,7 @@ class LoginViewController: UIViewController {
         if success {
             performSegue(withIdentifier: "segueFromLogin", sender: nil)
         } else {
+            print(error)
             showMessage(message: "Incorrect username or password 🌚", title: "Login Failed")
         }
     }

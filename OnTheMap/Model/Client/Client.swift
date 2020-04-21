@@ -65,7 +65,7 @@ class Client {
         }
     }
 
-    class func taskForGETRequest<ResponseType: Decodable>(url: URL, responseType: ResponseType.Type, completion: @escaping (ResponseType?, Error?) -> Void) {
+    class func taskForGETRequest<ResponseType: Decodable>(url: URL, responseType: ResponseType.Type, rangeNeeded: Bool, completion: @escaping (ResponseType?, Error?) -> Void) {
         let task = URLSession.shared.dataTask(with: url) { data, response, error in
             guard let data = data else {
                 DispatchQueue.main.async {
@@ -76,11 +76,21 @@ class Client {
 
             let decoder = JSONDecoder()
             do {
-                let responseObject = try decoder.decode(ResponseType.self, from: data)
-                DispatchQueue.main.async {
-                    completion(responseObject, nil)
+                if !rangeNeeded {
+                    let responseObject = try decoder.decode(ResponseType.self, from: data)
+                    DispatchQueue.main.async {
+                        completion(responseObject, nil)
+                    }
+                } else {
+                    let range = 5..<data.count
+                    let newData = data.subdata(in: range)
+                    
+                    let decoder = JSONDecoder()
+                    let responseObject = try! decoder.decode(ResponseType.self, from: newData)
+                    DispatchQueue.main.async {
+                        completion(responseObject, nil)
+                    }
                 }
-                return
             } catch {
                 DispatchQueue.main.async {
                     completion(nil, error)
@@ -91,9 +101,55 @@ class Client {
         task.resume()
     }
     
-    class func taskForPOSTRequest<RequestType: Encodable, ResponseType: Decodable>(url: URL, responseType: ResponseType.Type, body: RequestType, completion: @escaping (ResponseType?, Error?) -> Void) {
+    class func taskForPOSTRequest<RequestType: Encodable, ResponseType: Decodable>(url: URL, responseType: ResponseType.Type, body: RequestType, rangeNeeded: Bool, completion: @escaping (ResponseType?, Error?) -> Void) {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
+        request.httpBody   = try! JSONEncoder().encode(body)
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data else {
+                DispatchQueue.main.async {
+                    completion(nil, error)
+                }
+                return
+            }
+            let decoder = JSONDecoder()
+            do {
+                if !rangeNeeded {
+                    let responseObject = try decoder.decode(ResponseType.self, from: data)
+                    DispatchQueue.main.async {
+                        completion(responseObject, nil)
+                    }
+                } else {
+                    let range = 5..<data.count
+                    let dataWithoutSecurityCheck = data.subdata(in: range)
+                    let responseObject = try decoder.decode(ResponseType.self, from: dataWithoutSecurityCheck)
+                    DispatchQueue.main.async {
+                        completion(responseObject, nil)
+                    }
+                }
+            } catch {
+                do {
+                    let errorResponse = try decoder.decode(ErrorResponse.self, from: data) as Error
+                    DispatchQueue.main.async {
+                        completion(nil, errorResponse)
+                    }
+                } catch {
+                    DispatchQueue.main.async {
+                        completion(nil, error)
+                    }
+                }
+            }
+        }
+
+        task.resume()
+    }
+    
+    class func taskForPUTRequest<RequestType: Encodable, ResponseType: Decodable>(url: URL, responseType: ResponseType.Type, body: RequestType, completion: @escaping (ResponseType?, Error?) -> Void) {
+        var request = URLRequest(url: url)
+        request.httpMethod = "PUT"
         request.httpBody   = try! JSONEncoder().encode(body)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
@@ -128,52 +184,19 @@ class Client {
         task.resume()
     }
 
-    // TODO: Refactor into separate task for post requests
     class func login(username: String, password: String, completion: @escaping (Bool, Error?) -> Void) {
-        var request = URLRequest(url: Endpoints.login.url)
-        request.httpMethod = "POST"
-
         let body = LoginRequest(udacity: UdacityUsernamePassword(username: username, password: password))
-        request.httpBody = try! JSONEncoder().encode(body)
-
-        request.addValue("application/json", forHTTPHeaderField: "Accept")
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            guard let data = data else {
+        taskForPOSTRequest(url: Endpoints.login.url, responseType: LoginResponse.self, body: body, rangeNeeded: true) { response, error in
+            if let response = response {
+                Auth.accountKey = response.account.key
+                Auth.sessionId  = response.session.id
+                completion(true, nil)
+            } else {
                 completion(false, error)
-                return
-            }
-            let decoder = JSONDecoder()
-
-            let range = 5..<data.count
-            let dataWithoutSecurityCheck = data.subdata(in: range)
-
-            do {
-                let responseObject = try decoder.decode(LoginResponse.self, from: dataWithoutSecurityCheck)
-                Auth.accountKey = responseObject.account.key
-                Auth.sessionId  = responseObject.session.id
-                DispatchQueue.main.async {
-                    completion(true, nil)
-                }
-            } catch {
-                do {
-                    let errorResponse = try decoder.decode(ErrorResponse.self, from: dataWithoutSecurityCheck)
-                    DispatchQueue.main.async {
-                        completion(false, errorResponse)
-                    }
-                } catch {
-                    DispatchQueue.main.async {
-                        completion(false, error)
-                    }
-                }
             }
         }
-
-        task.resume()
     }
     
-    // TODO: MAYBE CREATE TASK FOR DELETE REQUEST?
     class func logout(completion: @escaping () -> Void) {
         var request = URLRequest(url: Endpoints.login.url)
         request.httpMethod = "DELETE"
@@ -201,7 +224,7 @@ class Client {
     
     class func getStudentLocations(limit: Int? = nil, skip: Int? = nil, order: String? = "", uniqueKey: String? = "", completion: @escaping ([StudentInformation]?, Error?) -> Void) {
         let url = Endpoints.getStudentLocations(limit: limit, skip: skip, order: order, uniqueKey: uniqueKey).url
-        taskForGETRequest(url: url, responseType: StudentLocationResponse.self) { response, error in
+        taskForGETRequest(url: url, responseType: StudentLocationResponse.self, rangeNeeded: false) { response, error in
             if let response = response {
                 completion(response.results, nil)
                 return
@@ -213,106 +236,38 @@ class Client {
     
     class func getPublicUserData(userId: String, completion: @escaping (UserInformation?, Error?) -> Void ) {
         let url = Endpoints.getPublicUserData(userId: userId).url
-        let request = URLRequest(url: url)
-        let session = URLSession.shared
-
-        let task = session.dataTask(with: request) { data, response, error in
-            if error != nil {
-                DispatchQueue.main.async {
-                    completion(nil, error)
-                }
+        
+        taskForGETRequest(url: url, responseType: UserInformation.self, rangeNeeded: true) { response, error in
+            if let response = response {
+                completion(response, nil)
                 return
-            }
-            
-            let range = 5..<data!.count
-            let newData = data?.subdata(in: range)
-            
-            let decoder = JSONDecoder()
-            let responseObject = try! decoder.decode(UserInformation.self, from: newData!)
-
-            DispatchQueue.main.async {
-                completion(responseObject, nil)
+            } else {
+                completion(nil, error)
             }
         }
-
-        task.resume()
     }
     
     class func postStudentLocation(student: StudentInformation, completion: @escaping (Bool, Error?) -> Void) {
-        let url = Endpoints.postLocation.url
-        var request = URLRequest(url: url)
 
-        request.httpMethod = "POST"
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        
-        let encoder = JSONEncoder()
-        do {
-            request.httpBody = try encoder.encode(student)
-        } catch {
-            DispatchQueue.main.async {
-                 completion(false, error)
-            }
-           
-            return
-        }
-        
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            if error != nil {
-                DispatchQueue.main.async {
-                    completion(false, error)
-                }
-                return
-            }
-            
-            DispatchQueue.main.async {
+        taskForPOSTRequest(url: Endpoints.postLocation.url, responseType: StudentInformation.self, body: student, rangeNeeded: false) { response, error in
+            if let response = response {
                 completion(true, nil)
-            }
-            
-        }
-
-        task.resume()
-    }
-    
-    //TODO: MAYBE REFACTOR INTO TASK FOR POST
-    class func putStudentLocation(student: StudentInformation, completion: @escaping (Bool, Error?) -> Void) {
-        let url = Endpoints.putLocation(objectId: student.objectId!).url
-        var request = URLRequest(url: url)
-
-        request.httpMethod = "PUT"
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        
-        let encoder = JSONEncoder()
-        do {
-            request.httpBody = try encoder.encode(student)
-        } catch {
-            DispatchQueue.main.async {
+            } else {
                 completion(false, error)
             }
-            return
         }
+    }
+
+    class func putStudentLocation(student: StudentInformation, completion: @escaping (Bool, Error?) -> Void) {
+        let url = Endpoints.putLocation(objectId: student.objectId!).url
         
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            if error != nil {
-                do {
-                    let decoder = JSONDecoder()
-                    let errorResponse = try decoder.decode(ErrorResponse.self, from: data!)
-                    DispatchQueue.main.async {
-                        completion(false, errorResponse)
-                    }
-                } catch {
-                    DispatchQueue.main.async {
-                        completion(false, error)
-                    }
-                }
-                return
-            }
-
-            DispatchQueue.main.async {
+        taskForPUTRequest(url: url, responseType: StudentInformation.self, body: student) { response, error in
+            if let response = response {
                 completion(true, nil)
+            } else {
+                completion(false, error)
             }
         }
-
-        task.resume()
     }
 
 }
