@@ -22,11 +22,7 @@ class LoginViewController: UIViewController {
 
         setupSignupTextView()
         
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
+        activityIndicator.hidesWhenStopped = true
     }
     
     func setupSignupTextView() {
@@ -53,28 +49,23 @@ class LoginViewController: UIViewController {
         if success {
             performSegue(withIdentifier: "segueFromLogin", sender: nil)
         } else {
-            print(error)
-            showMessage(message: "Incorrect username or password 🌚", title: "Login Failed")
+            showMessage(message: error!.localizedDescription, title: "Login Failed")
         }
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "segueFromLogin" {
-            self.emailTextField.text = ""
-            self.emailTextField.resignFirstResponder()
+            emailTextField.text = ""
+            emailTextField.resignFirstResponder()
 
-            self.passwordTextField.text = ""
-            self.passwordTextField.resignFirstResponder()
+            passwordTextField.text = ""
+            passwordTextField.resignFirstResponder()
         }
     }
     
     func setLoggingIn(_ loggingIn: Bool) {
-        if loggingIn {
-            activityIndicator.startAnimating()
-        } else {
-            activityIndicator.stopAnimating()
-        }
-        
+        loggingIn ? activityIndicator.startAnimating(): activityIndicator.stopAnimating()
+
         loginButton.isEnabled       = !loggingIn
         emailTextField.isEnabled    = !loggingIn
         passwordTextField.isEnabled = !loggingIn

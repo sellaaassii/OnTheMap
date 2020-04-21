@@ -13,6 +13,7 @@ import UIKit
 class AddLocationMapViewController: UIViewController {
     @IBOutlet weak var finishButton: UIButton!
     @IBOutlet weak var mapView: MKMapView!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     var annotation: MKPointAnnotation!
     var mapLocationString: String!
@@ -22,27 +23,28 @@ class AddLocationMapViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.mapView.delegate = self
+        mapView.delegate = self
+        activityIndicator.hidesWhenStopped = true
     }
     
-    //TODO: CLEAN THIS UP
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.mapView.setCenter(annotation.coordinate, animated: true)
+        mapView.setCenter(annotation.coordinate, animated: true)
         
         let latitudeMeters = CLLocationDistance(exactly: 300)!
         let longitudeMeters = CLLocationDistance(exactly: 300)!
         
         let region = MKCoordinateRegion(center: annotation.coordinate, latitudinalMeters: latitudeMeters, longitudinalMeters: longitudeMeters)
-        self.mapView.addAnnotation(annotation)
-        self.mapView.setRegion(region, animated: true)
+        mapView.addAnnotation(annotation)
+        mapView.setRegion(region, animated: true)
         
-        let firstAnnotation = self.mapView.annotations[0]
-        self.mapView.selectAnnotation(firstAnnotation, animated: true)
+        let firstAnnotation = mapView.annotations[0]
+        mapView.selectAnnotation(firstAnnotation, animated: true)
     }
 
     @IBAction func finishClicked(_ sender: Any) {
         // check if student has existing location before posting, but apparently this doesn't work because random unique key is generated every time a request is made
+        activityIndicator.startAnimating()
         Client.getStudentLocations(uniqueKey: Client.Auth.accountKey, completion: handleCheckExistingStudent(results:error:))
 }
     
@@ -55,7 +57,8 @@ class AddLocationMapViewController: UIViewController {
         // for getting first name, last name and such
         Client.getPublicUserData(userId: Client.Auth.accountKey) { response, error in
             if error != nil {
-                self.showMessage(message: "Your session has timed out. Please try logging in again! 🙃", title: "Session Timeout")
+                self.activityIndicator.stopAnimating()
+                self.showMessage(message: error!.localizedDescription, title: "Add Location Failed")
             } else if let response = response {
 
                 let student = StudentInformation(objectId: objectId, uniqueKey: response.key, firstName: response.firstName, lastName: response.lastName, mapString: self.mapLocationString, mediaURL: self.url, latitude: Float(self.annotation.coordinate.latitude), longitude: Float(self.annotation.coordinate.longitude))
@@ -72,10 +75,11 @@ class AddLocationMapViewController: UIViewController {
     }
     
     func handlePutPostStudentLocation(success: Bool, error: Error?) {
+        activityIndicator.stopAnimating()
         if success {
-            self.dismiss(animated: true, completion: nil)
+            dismiss(animated: true, completion: nil)
         } else {
-            showMessage(message: "Location could not be added 😫", title: "Add Location Failed")
+            showMessage(message: error!.localizedDescription, title: "Add Location Failed")
         }
     }
     
