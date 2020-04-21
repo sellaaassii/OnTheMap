@@ -30,6 +30,11 @@ class MapTabBarController: UITabBarController {
         let order = "-updatedAt"
         
         Client.getStudentLocations(limit: limit, order: order) { response, error in
+            if let error = error {
+                self.showMessage(message: error.localizedDescription, title: "Connection Error")
+                return
+            }
+            
             StudentLocationModel.locationsRecent = response ?? [StudentInformation]()
             StudentLocationModel.locationsPast   = response ?? [StudentInformation]()
             

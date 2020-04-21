@@ -20,6 +20,11 @@ class MapLocationViewController: UIViewController, MKMapViewDelegate {
         let limit = 100
         let order = "updatedAt"
         Client.getStudentLocations(limit: limit, order: order) { response, error in
+            if let error = error {
+                self.showMessage(message: error.localizedDescription, title: "Connection Error")
+                return
+            }
+            
             StudentLocationModel.locationsPast = response ?? [StudentInformation]()
             
             self.reloadData()
@@ -28,12 +33,13 @@ class MapLocationViewController: UIViewController, MKMapViewDelegate {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        self.mapView.reloadInputViews()
+        super.viewWillAppear(animated)
+        mapView.reloadInputViews()
         reloadData()
     }
 
     func reloadData() {
-        self.mapView.removeAnnotations(self.mapView.annotations)
+        mapView.removeAnnotations(mapView.annotations)
         
         for location in StudentLocationModel.locationsPast {
             let latitude   = CLLocationDegrees(location.latitude!)
@@ -45,7 +51,7 @@ class MapLocationViewController: UIViewController, MKMapViewDelegate {
             annotation.subtitle   = location.mediaURL
             annotation.coordinate = coordinate
             
-            self.mapView.addAnnotation(annotation)
+            mapView.addAnnotation(annotation)
         }
     }
 

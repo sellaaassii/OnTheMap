@@ -22,6 +22,11 @@ class MapLocationTableViewController: UIViewController {
         let order = "-updatedAt"
 
         Client.getStudentLocations(limit: limit, order: order) { response, error in
+            if let error = error {
+                self.showMessage(message: error.localizedDescription, title: "Connection Error")
+                return
+            }
+            
             StudentLocationModel.locationsRecent = response ?? [StudentInformation]()
 
             self.tableView.delegate = self
@@ -30,12 +35,8 @@ class MapLocationTableViewController: UIViewController {
         }
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-    }
-
     func reloadData() {
-        self.tableView?.reloadData()
+        tableView?.reloadData()
     }
 }
 

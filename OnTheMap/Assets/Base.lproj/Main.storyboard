@@ -133,6 +133,9 @@
                                     <action selector="findLocation:" destination="xKL-hD-8Ce" eventType="touchUpInside" id="iu3-EK-KNE"/>
                                 </connections>
                             </button>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="Xbw-67-jX6">
+                                <rect key="frame" x="180" y="479" width="64" height="77"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
@@ -143,15 +146,19 @@
                             <constraint firstItem="Kis-I1-0qy" firstAttribute="leading" secondItem="4xg-rR-r5g" secondAttribute="leading" constant="53" id="HOG-1u-ebF"/>
                             <constraint firstItem="1Au-c6-qMQ" firstAttribute="leading" secondItem="4xg-rR-r5g" secondAttribute="leading" constant="53" id="MSC-AF-Bgs"/>
                             <constraint firstItem="4xg-rR-r5g" firstAttribute="bottom" secondItem="1Au-c6-qMQ" secondAttribute="bottom" constant="443" id="Mdc-vG-zIR"/>
+                            <constraint firstItem="Xbw-67-jX6" firstAttribute="top" secondItem="1Au-c6-qMQ" secondAttribute="bottom" constant="114" id="Mum-lz-Z3s"/>
+                            <constraint firstItem="Xbw-67-jX6" firstAttribute="leading" secondItem="4xg-rR-r5g" secondAttribute="leading" constant="180" id="PFF-L0-7Ep"/>
                             <constraint firstItem="Z5K-ch-9y6" firstAttribute="leading" secondItem="4xg-rR-r5g" secondAttribute="leading" constant="149" id="Rlk-Dx-yOs"/>
                             <constraint firstItem="9qW-YT-RIb" firstAttribute="top" secondItem="Z5K-ch-9y6" secondAttribute="bottom" constant="58" id="SfJ-kf-DWL"/>
                             <constraint firstItem="4xg-rR-r5g" firstAttribute="trailing" secondItem="1Au-c6-qMQ" secondAttribute="trailing" constant="43" id="UdS-Q0-40M"/>
+                            <constraint firstItem="4xg-rR-r5g" firstAttribute="trailing" secondItem="Xbw-67-jX6" secondAttribute="trailing" constant="170" id="Ve3-kY-etH"/>
                             <constraint firstItem="4xg-rR-r5g" firstAttribute="bottom" secondItem="Z5K-ch-9y6" secondAttribute="bottom" constant="615" id="bh8-rk-Rdj"/>
                             <constraint firstItem="Kis-I1-0qy" firstAttribute="top" secondItem="9qW-YT-RIb" secondAttribute="bottom" constant="8" id="eDV-tX-e7W"/>
                             <constraint firstItem="Z5K-ch-9y6" firstAttribute="top" secondItem="4xg-rR-r5g" secondAttribute="top" constant="53" id="iOy-Ov-KQZ"/>
                             <constraint firstItem="4xg-rR-r5g" firstAttribute="trailing" secondItem="Kis-I1-0qy" secondAttribute="trailing" constant="43" id="qKW-4y-ofZ"/>
                             <constraint firstItem="1Au-c6-qMQ" firstAttribute="top" secondItem="Kis-I1-0qy" secondAttribute="bottom" constant="8" id="r7g-kP-0RY"/>
                             <constraint firstItem="Kis-I1-0qy" firstAttribute="top" secondItem="9qW-YT-RIb" secondAttribute="bottom" constant="8" id="thR-RK-1Du"/>
+                            <constraint firstItem="4xg-rR-r5g" firstAttribute="bottom" secondItem="Xbw-67-jX6" secondAttribute="bottom" constant="252" id="y1f-BK-Dmr"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="4xg-rR-r5g"/>
                     </view>
@@ -163,6 +170,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="activityIndicator" destination="Xbw-67-jX6" id="LOS-Mz-NpT"/>
                         <outlet property="cancelButton" destination="HJC-iV-b8r" id="sYA-ex-VkP"/>
                         <outlet property="findlocationButton" destination="1Au-c6-qMQ" id="VCI-5X-Mi0"/>
                         <outlet property="linkTextField" destination="Kis-I1-0qy" id="kGc-5K-ESE"/>
@@ -200,12 +208,19 @@
                                     <action selector="finishClicked:" destination="rGG-DS-fkT" eventType="touchUpInside" id="Xw7-Jr-pFX"/>
                                 </connections>
                             </button>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="0fh-XM-iad">
+                                <rect key="frame" x="147" y="595" width="121" height="105"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstItem="xob-gM-cmm" firstAttribute="leading" secondItem="l1s-Go-s3l" secondAttribute="leading" id="0gj-Vj-YBf"/>
                             <constraint firstItem="xob-gM-cmm" firstAttribute="trailing" secondItem="l1s-Go-s3l" secondAttribute="trailing" id="1hK-Jc-hay"/>
+                            <constraint firstItem="l1s-Go-s3l" firstAttribute="trailing" secondItem="0fh-XM-iad" secondAttribute="trailing" constant="146" id="3gK-0U-p4e"/>
+                            <constraint firstItem="14c-N4-QUk" firstAttribute="top" secondItem="0fh-XM-iad" secondAttribute="bottom" constant="28" id="6tR-9X-0IO"/>
                             <constraint firstItem="xob-gM-cmm" firstAttribute="bottom" secondItem="l1s-Go-s3l" secondAttribute="bottom" id="9Br-oG-Y0X"/>
+                            <constraint firstItem="0fh-XM-iad" firstAttribute="leading" secondItem="l1s-Go-s3l" secondAttribute="leading" constant="147" id="FOc-Lp-ZFD"/>
+                            <constraint firstItem="0fh-XM-iad" firstAttribute="top" secondItem="l1s-Go-s3l" secondAttribute="top" constant="539" id="GYx-QT-xAl"/>
                             <constraint firstItem="14c-N4-QUk" firstAttribute="leading" secondItem="l1s-Go-s3l" secondAttribute="leading" constant="20" id="JF9-7d-zNS"/>
                             <constraint firstItem="14c-N4-QUk" firstAttribute="top" secondItem="l1s-Go-s3l" secondAttribute="top" constant="672" id="MOj-7Q-EJo"/>
                             <constraint firstItem="xob-gM-cmm" firstAttribute="leading" secondItem="l1s-Go-s3l" secondAttribute="leading" id="Mnl-GZ-9c1"/>
@@ -220,6 +235,7 @@
                     </view>
                     <navigationItem key="navigationItem" title="Add Location" id="koZ-A9-bHF"/>
                     <connections>
+                        <outlet property="activityIndicator" destination="0fh-XM-iad" id="jgq-Lz-zAG"/>
                         <outlet property="finishButton" destination="14c-N4-QUk" id="1ox-is-lHZ"/>
                         <outlet property="mapView" destination="xob-gM-cmm" id="x7U-0L-FpP"/>
                     </connections>
