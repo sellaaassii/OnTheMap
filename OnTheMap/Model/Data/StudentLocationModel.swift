@@ -10,13 +10,11 @@ import Foundation
 import MapKit
 
 class StudentLocationModel {
-    static var locations         = [StudentLocation]()
-    static var annotationsPast   = [MKPointAnnotation]()
-    static var annotationsRecent = [MKPointAnnotation]()
+    static var locationsPast         = [StudentLocation]()
+    static var locationsRecent   = [StudentLocation]()
     
     class func clearAll() {
-        StudentLocationModel.locations         = [StudentLocation]()
-        StudentLocationModel.annotationsPast   = [MKPointAnnotation]()
-        StudentLocationModel.annotationsRecent = [MKPointAnnotation]()
+       locationsPast         = [StudentLocation]()
+       locationsRecent   = [StudentLocation]()
     }
 }

@@ -20,25 +20,10 @@ class MapLocationViewController: UIViewController, MKMapViewDelegate {
         let limit = 100
         let order = "updatedAt"
         Client.getStudentLocations(limit: limit, order: order) { response, error in
-            StudentLocationModel.locations = response!
-            StudentLocationModel.annotationsPast = [MKPointAnnotation]()
-            print("responses bro")
+            StudentLocationModel.locationsPast = response ?? [StudentLocation]()
             
-            for location in StudentLocationModel.locations {
-                let latitude  = CLLocationDegrees(location.latitude!)
-                let longitude = CLLocationDegrees(location.longitude!)
-                
-                let coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
-                
-                let annotation = MKPointAnnotation()
-                annotation.coordinate = coordinate
-                annotation.title = "\(location.firstName) \(location.lastName)"
-                annotation.subtitle = location.mediaURL
-                
-                StudentLocationModel.annotationsPast.append(annotation)
-            }
+            self.reloadData()
             
-            self.mapView.addAnnotations(StudentLocationModel.annotationsPast)
             self.mapView.delegate = self
             
         }
@@ -48,10 +33,23 @@ class MapLocationViewController: UIViewController, MKMapViewDelegate {
         self.mapView.reloadInputViews()
         reloadData()
     }
-    
+
     func reloadData() {
         self.mapView.removeAnnotations(self.mapView.annotations)
-        self.mapView.addAnnotations(StudentLocationModel.annotationsPast)
+        
+        for location in StudentLocationModel.locationsPast {
+            let latitude  = CLLocationDegrees(location.latitude!)
+            let longitude = CLLocationDegrees(location.longitude!)
+            
+            let coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+            
+            let annotation = MKPointAnnotation()
+            annotation.coordinate = coordinate
+            annotation.title = "\(location.firstName!) \(location.lastName!)"
+            annotation.subtitle = location.mediaURL
+            
+            self.mapView.addAnnotation(annotation)
+        }
     }
 
 
@@ -84,7 +82,6 @@ class MapLocationViewController: UIViewController, MKMapViewDelegate {
 
             if control == view.rightCalloutAccessoryView {
                 let app = UIApplication.shared
-                print("url is loading")
                 app.open(URL(string: validUrl)!, options: [:], completionHandler: nil)
             }
 

@@ -80,6 +80,7 @@ class Client {
                 DispatchQueue.main.async {
                     completion(responseObject, nil)
                 }
+                return
             } catch {
 //                do {
 //                    let errorResponse = try decoder.decode(ErrorResponse.self, from: data) as Error
@@ -208,6 +209,7 @@ class Client {
         taskForGETRequest(url: url, responseType: StudentLocationResponse.self) { response, error in
             if let response = response {
                 completion(response.results, nil)
+                return
             } else {
                 print("error in get student locations \(error)")
                 completion([], error)
@@ -321,7 +323,6 @@ class Client {
                     DispatchQueue.main.async {
                         completion(false, error)
                     }
-                    
                 }
                 return
             }

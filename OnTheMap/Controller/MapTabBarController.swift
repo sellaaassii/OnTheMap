@@ -30,52 +30,16 @@ class MapTabBarController: UITabBarController {
 
         // TODO: REFACTOR / find better way of doing reload
         // RELOAD DATA FOR MAP VIEW
-        var order = "updatedAt"
+        let order = "-updatedAt"
         
         Client.getStudentLocations(limit: limit, order: order) { response, error in
-            StudentLocationModel.locations = response!
-                StudentLocationModel.annotationsPast = [MKPointAnnotation]()
-
-                for location in StudentLocationModel.locations {
-                    let latitude  = CLLocationDegrees(location.latitude!)
-                    let longitude = CLLocationDegrees(location.longitude!)
-
-                    let coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
-
-                    let annotation = MKPointAnnotation()
-                    annotation.coordinate = coordinate
-                    annotation.title = "\(location.firstName!) \(location.lastName!)"
-                    annotation.subtitle = location.mediaURL
-
-                    StudentLocationModel.annotationsPast.append(annotation)
-            }
+            StudentLocationModel.locationsRecent = response ?? [StudentLocation]()
+            StudentLocationModel.locationsPast = response ?? [StudentLocation]()
             
             let mapViewController = self.viewControllers?[0] as! MapLocationViewController
-            mapViewController.reloadData()
-        }
-        
-        // RELOAD DATA FOR TABLE VIEW
-        order = "-updatedAt"
-        Client.getStudentLocations(limit: limit, order: order) { response, error in
-            // should probably fix the locations in the student model🙃
-            StudentLocationModel.locations = response!
-            StudentLocationModel.annotationsRecent = [MKPointAnnotation]()
-
-            for location in StudentLocationModel.locations {
-                let latitude  = CLLocationDegrees(location.latitude!)
-                let longitude = CLLocationDegrees(location.longitude!)
-                
-                let coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
-
-                let annotation = MKPointAnnotation()
-                annotation.coordinate = coordinate
-                annotation.title = "\(location.firstName!) \(location.lastName!)"
-                annotation.subtitle = location.mediaURL
-
-                StudentLocationModel.annotationsRecent.append(annotation)
-            }
-
             let mapTableViewController = self.viewControllers?[1] as! MapLocationTableViewController
+
+            mapViewController.reloadData()
             mapTableViewController.reloadData()
         }
     }

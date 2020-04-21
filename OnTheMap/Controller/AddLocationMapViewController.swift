@@ -18,6 +18,7 @@ class AddLocationMapViewController: UIViewController {
     var mapLocationString: String!
     var url: String!
     var student: StudentLocation!
+    var locations: [StudentLocation]!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,7 +29,6 @@ class AddLocationMapViewController: UIViewController {
     //TODO: CLEAN THIS UP
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        print("view will appear")
         self.mapView.setCenter(annotation.coordinate, animated: true)
         
         let latitudeMeters = CLLocationDistance(exactly: 300)!
@@ -47,29 +47,32 @@ class AddLocationMapViewController: UIViewController {
         // POST STUDENT LOCATION
         let userId = Client.Auth.accountKey
 
-        // check if student has existing location before posting
+        // check if student has existing location before posting, but apparently this doesn't work because random unique key is generated every time a request is made
         Client.getStudentLocations(uniqueKey: userId, completion: handleCheckExistingStudent(results:error:))
 }
     
     func handleCheckExistingStudent(results: [StudentLocation]?, error: Error?) {
-        
         var objectId = ""
-        if let results = results {
-            
+        if let results = results, results.count > 0 {
             objectId = results[0].objectId!
         }
         
         // for getting first name, last name and such
         Client.getPublicUserData(userId: Client.Auth.accountKey) { response, error in
             if let error = error {
-                self.showLocationFailure(message: "Can't find user apparently \(error.localizedDescription)")
+                self.showLocationFailure(message: "Your session has timed out. Please try logging in again! 🙃")
             } else if let response = response {
-                print("")
+
                 self.student = StudentLocation(objectId: objectId, uniqueKey: response.key, firstName: response.firstName, lastName: response.lastName, mapString: self.mapLocationString, mediaURL: self.url, latitude: Float(self.annotation.coordinate.latitude), longitude: Float(self.annotation.coordinate.longitude))
-                
+
                 if error == nil {
                     //the user id exists, meaning there are locations, so update existing location
-                    Client.putStudentLocation(student: self.student, completion: self.handlePutStudentLocation(success:error:))
+                    //checking if the user exists with unique key is not working, which is why this is needed
+                    if !objectId.isEmpty {
+                        Client.putStudentLocation(student: self.student, completion: self.handlePutStudentLocation(success:error:))
+                    } else {
+                        Client.postStudentLocation(student: self.student, completion: self.handlePostStudentLocation(success:error:))
+                    }
                 } else {
                     // the user id does't exist, meaning there are no locations, so add new location by post
                     Client.postStudentLocation(student: self.student, completion: self.handlePostStudentLocation(success:error:))

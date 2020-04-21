@@ -23,22 +23,7 @@ class MapLocationTableViewController: UIViewController {
         let order = "-updatedAt"
 
         Client.getStudentLocations(limit: limit, order: order) { response, error in
-            StudentLocationModel.locations = response!
-            StudentLocationModel.annotationsRecent = [MKPointAnnotation]()
-
-            for location in StudentLocationModel.locations {
-                let latitude  = CLLocationDegrees(location.latitude!)
-                let longitude = CLLocationDegrees(location.longitude!)
-                
-                let coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
-                
-                let annotation = MKPointAnnotation()
-                annotation.coordinate = coordinate
-                annotation.title = "\(location.firstName!) \(location.lastName!)"
-                annotation.subtitle = location.mediaURL
-
-                StudentLocationModel.annotationsRecent.append(annotation)
-            }
+            StudentLocationModel.locationsRecent = response ?? [StudentLocation]()
 
             self.tableView.delegate = self
             self.tableView.dataSource = self
@@ -58,16 +43,16 @@ class MapLocationTableViewController: UIViewController {
 
 extension MapLocationTableViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return StudentLocationModel.annotationsRecent.count
+        return StudentLocationModel.locationsRecent.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "LocationTableViewCell")!
+
+        let location = StudentLocationModel.locationsRecent[indexPath.row]
         
-        let annotation = StudentLocationModel.annotationsRecent[indexPath.row]
-        
-        cell.textLabel?.text = annotation.title
-        cell.detailTextLabel?.text = annotation.subtitle
+        cell.textLabel?.text = "\(location.firstName!) \(location.lastName!)"
+        cell.detailTextLabel?.text = location.mediaURL
         
         return cell
     }
@@ -75,8 +60,9 @@ extension MapLocationTableViewController: UITableViewDelegate, UITableViewDataSo
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedIndex = indexPath.row
         
-        let annotation = StudentLocationModel.annotationsRecent[indexPath.row]
-        let url = annotation.subtitle
+        let location = StudentLocationModel.locationsRecent[indexPath.row]
+
+        let url = location.mediaURL
         
         if url!.isValidURL {
             var validUrl = url!
@@ -86,14 +72,13 @@ extension MapLocationTableViewController: UITableViewDelegate, UITableViewDataSo
             }
 
             let app = UIApplication.shared
-            print("url is loading")
             app.open(URL(string: validUrl)!, options: [:], completionHandler: nil)
 
         } else {
             return
         }
     }
-    
+
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }

@@ -82,7 +82,7 @@ class AddLocationViewController: UIViewController {
 
             self.navigationController?.pushViewController(controller, animated: true)
         } else {
-            showLocationFailure(message: error!.localizedDescription)
+            showLocationFailure(message: "Location could not be found. 😞")
         }
     }
 }
