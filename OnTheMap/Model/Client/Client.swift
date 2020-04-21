@@ -12,7 +12,7 @@ class Client {
     
     struct Auth {
         static var accountKey = ""
-        static var sessionId = ""
+        static var sessionId  = ""
     }
     
     enum Endpoints {
@@ -82,20 +82,22 @@ class Client {
                 }
                 return
             } catch {
-                    DispatchQueue.main.async {
-                        completion(nil, error)
-                    }
+                DispatchQueue.main.async {
+                    completion(nil, error)
+                }
             }
         }
+
         task.resume()
     }
     
     class func taskForPOSTRequest<RequestType: Encodable, ResponseType: Decodable>(url: URL, responseType: ResponseType.Type, body: RequestType, completion: @escaping (ResponseType?, Error?) -> Void) {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-        request.httpBody = try! JSONEncoder().encode(body)
+        request.httpBody   = try! JSONEncoder().encode(body)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
+
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
             guard let data = data else {
                 DispatchQueue.main.async {
@@ -122,6 +124,7 @@ class Client {
                 }
             }
         }
+
         task.resume()
     }
 
@@ -149,7 +152,7 @@ class Client {
             do {
                 let responseObject = try decoder.decode(LoginResponse.self, from: dataWithoutSecurityCheck)
                 Auth.accountKey = responseObject.account.key
-                Auth.sessionId = responseObject.session.id
+                Auth.sessionId  = responseObject.session.id
                 DispatchQueue.main.async {
                     completion(true, nil)
                 }
@@ -166,6 +169,7 @@ class Client {
                 }
             }
         }
+
         task.resume()
     }
     
@@ -188,10 +192,10 @@ class Client {
         let session = URLSession.shared
         let task = session.dataTask(with: request) { data, response, error in
             Auth.accountKey = ""
-            Auth.sessionId = ""
+            Auth.sessionId  = ""
             completion()
         }
-    
+
         task.resume()
     }
     
@@ -211,25 +215,26 @@ class Client {
         let url = Endpoints.getPublicUserData(userId: userId).url
         let request = URLRequest(url: url)
         let session = URLSession.shared
+
         let task = session.dataTask(with: request) { data, response, error in
-          if error != nil {
-            DispatchQueue.main.async {
-                completion(nil, error)
+            if error != nil {
+                DispatchQueue.main.async {
+                    completion(nil, error)
+                }
+                return
             }
-             
-             return
-          }
             
-          let range = 5..<data!.count
-          let newData = data?.subdata(in: range)
+            let range = 5..<data!.count
+            let newData = data?.subdata(in: range)
             
             let decoder = JSONDecoder()
             let responseObject = try! decoder.decode(UserInformation.self, from: newData!)
+
             DispatchQueue.main.async {
                 completion(responseObject, nil)
             }
-            
         }
+
         task.resume()
     }
     
@@ -289,13 +294,11 @@ class Client {
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
             if error != nil {
                 do {
-                    // TODO: CHECK ERROR CODE IN RESPONSE
                     let decoder = JSONDecoder()
                     let errorResponse = try decoder.decode(ErrorResponse.self, from: data!)
                     DispatchQueue.main.async {
                         completion(false, errorResponse)
                     }
-                    
                 } catch {
                     DispatchQueue.main.async {
                         completion(false, error)
@@ -307,7 +310,6 @@ class Client {
             DispatchQueue.main.async {
                 completion(true, nil)
             }
-            
         }
 
         task.resume()

@@ -25,18 +25,15 @@ class MapTabBarController: UITabBarController {
         if let count = self.viewControllers?.count, count < 2 {
             return
         }
-        
-        let limit = 100
 
-        // TODO: REFACTOR / find better way of doing reload
-        // RELOAD DATA FOR MAP VIEW
+        let limit = 100
         let order = "-updatedAt"
         
         Client.getStudentLocations(limit: limit, order: order) { response, error in
             StudentLocationModel.locationsRecent = response ?? [StudentLocation]()
-            StudentLocationModel.locationsPast = response ?? [StudentLocation]()
+            StudentLocationModel.locationsPast   = response ?? [StudentLocation]()
             
-            let mapViewController = self.viewControllers?[0] as! MapLocationViewController
+            let mapViewController      = self.viewControllers?[0] as! MapLocationViewController
             let mapTableViewController = self.viewControllers?[1] as! MapLocationTableViewController
 
             mapViewController.reloadData()

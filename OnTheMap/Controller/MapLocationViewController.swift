@@ -23,9 +23,7 @@ class MapLocationViewController: UIViewController, MKMapViewDelegate {
             StudentLocationModel.locationsPast = response ?? [StudentLocation]()
             
             self.reloadData()
-            
             self.mapView.delegate = self
-            
         }
     }
     
@@ -38,15 +36,14 @@ class MapLocationViewController: UIViewController, MKMapViewDelegate {
         self.mapView.removeAnnotations(self.mapView.annotations)
         
         for location in StudentLocationModel.locationsPast {
-            let latitude  = CLLocationDegrees(location.latitude!)
-            let longitude = CLLocationDegrees(location.longitude!)
-            
+            let latitude   = CLLocationDegrees(location.latitude!)
+            let longitude  = CLLocationDegrees(location.longitude!)
             let coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
             
-            let annotation = MKPointAnnotation()
+            let annotation        = MKPointAnnotation()
+            annotation.title      = "\(location.firstName!) \(location.lastName!)"
+            annotation.subtitle   = location.mediaURL
             annotation.coordinate = coordinate
-            annotation.title = "\(location.firstName!) \(location.lastName!)"
-            annotation.subtitle = location.mediaURL
             
             self.mapView.addAnnotation(annotation)
         }
@@ -55,7 +52,6 @@ class MapLocationViewController: UIViewController, MKMapViewDelegate {
 
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         let reuseId = "pin"
-        
         var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId) as? MKPinAnnotationView
         
         if let pinView = pinView {
@@ -63,7 +59,7 @@ class MapLocationViewController: UIViewController, MKMapViewDelegate {
         } else {
             pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
             pinView?.canShowCallout = true
-            pinView?.pinTintColor = MKPinAnnotationView.redPinColor()
+            pinView?.pinTintColor   = MKPinAnnotationView.redPinColor()
             pinView?.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
         }
 

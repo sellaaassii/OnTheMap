@@ -34,37 +34,31 @@ class LoginViewController: UIViewController {
 
         signupString.setAttributes([.link: signupUrl], range: NSMakeRange(23, 7))
 
-        signUpTextView.attributedText = signupString
-        signUpTextView.isEditable     = false
+        signUpTextView.attributedText           = signupString
+        signUpTextView.isEditable               = false
+        signUpTextView.textAlignment            = .center
         signUpTextView.isUserInteractionEnabled = true
-        signUpTextView.textAlignment = .center
 
-        signUpTextView.linkTextAttributes = [.foregroundColor: UIColor.blue]
+        signUpTextView.linkTextAttributes       = [.foregroundColor: UIColor.blue]
     }
     
     @IBAction func loginClicked(_ sender: Any) {
         Client.login(username: emailTextField.text ?? "", password: passwordTextField.text ?? "", completion: handleLoginResponse(success:error:))
     }
     
-    //TODO: show appropriate login message
     func handleLoginResponse(success: Bool, error: Error?) {
         if success {
             performSegue(withIdentifier: "segueFromLogin", sender: nil)
         } else {
-            showLoginFailure(message: error?.localizedDescription ?? "")
+            showMessage(message: "Incorrect username or password 🌚", title: "Login Failed")
         }
-    }
-    
-    func showLoginFailure(message: String) {
-        let alertVC = UIAlertController(title: "Login Failed", message: message, preferredStyle: .alert)
-        alertVC.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-        self.present(alertVC, animated: true, completion: nil)
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "segueFromLogin" {
             self.emailTextField.text = ""
             self.emailTextField.resignFirstResponder()
+
             self.passwordTextField.text = ""
             self.passwordTextField.resignFirstResponder()
         }

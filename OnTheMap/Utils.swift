@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 // taken from https://stackoverflow.com/questions/28079123/how-to-check-validity-of-url-in-swift/30130535
 extension String {
@@ -18,5 +19,13 @@ extension String {
         } else {
             return false
         }
+    }
+}
+
+extension UIViewController {
+    func showMessage(message: String, title: String) {
+        let alertVC = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alertVC.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        self.present(alertVC, animated: true, completion: nil)
     }
 }

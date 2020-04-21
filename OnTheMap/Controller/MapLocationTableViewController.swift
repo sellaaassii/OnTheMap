@@ -18,7 +18,6 @@ class MapLocationTableViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // TODO: REFACTOR
         let limit = 100
         let order = "-updatedAt"
 

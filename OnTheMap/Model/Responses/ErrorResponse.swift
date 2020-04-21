@@ -11,7 +11,6 @@ import Foundation
 struct ErrorResponse: Codable {
     let status: Int
     let error: String
-    let code: Int?
 }
 
 extension ErrorResponse: LocalizedError {
